@@ -343,7 +343,22 @@ docker run -p 3000:3000 gymtrack-backend
 
 ## 📄 Licença
 
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+Este projeto está sob **Licença Proprietária Restritiva**. 
+
+**⚠️ ATENÇÃO**: Este software é CONFIDENCIAL e PROPRIETÁRIO. É EXPRESSAMENTE PROIBIDO:
+
+- Copiar, reproduzir ou distribuir este software
+- Modificar, adaptar ou criar trabalhos derivados
+- Engenharia reversa, descompilação ou desmontagem
+- Comercializar, vender ou licenciar este software
+- Usar este software para fins comerciais sem autorização
+- Compartilhar código fonte ou documentação
+
+**Penalidades**: Violações podem resultar em ação legal, multas de até R$ 100.000,00 e bloqueio de acesso.
+
+Para uso comercial ou modificações, entre em contato: **legal@gymtrack.app**
+
+Veja o arquivo [LICENSE](../LICENSE) para detalhes completos.
 
 ## 📞 Suporte
 

@@ -200,6 +200,27 @@ O README conterá:
 
 ---
 
+## 🔒 Licença
+
+Este projeto está sob **Licença Proprietária Restritiva**. 
+
+**⚠️ ATENÇÃO**: Este software é CONFIDENCIAL e PROPRIETÁRIO. É EXPRESSAMENTE PROIBIDO:
+
+- Copiar, reproduzir ou distribuir este software
+- Modificar, adaptar ou criar trabalhos derivados
+- Engenharia reversa, descompilação ou desmontagem
+- Comercializar, vender ou licenciar este software
+- Usar este software para fins comerciais sem autorização
+- Compartilhar código fonte ou documentação
+
+**Penalidades**: Violações podem resultar em ação legal, multas de até R$ 100.000,00 e bloqueio de acesso.
+
+Para uso comercial ou modificações, entre em contato: **legal@gymtrack.app**
+
+Veja os arquivos [LICENSE](LICENSE) e [AVISO_LEGAL.md](AVISO_LEGAL.md) para detalhes completos.
+
+---
+
 ## 🔮 Futuras Melhorias
 
 - Haptics feedback
