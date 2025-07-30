@@ -8,6 +8,8 @@ const workoutRoutes = require('./routes/workout');
 const dietRoutes = require('./routes/diet');
 const progressRoutes = require('./routes/progress');
 const aiRoutes = require('./routes/ai');
+const exerciseRoutes = require('./routes/exercise');
+const integratedRoutes = require('./routes/integrated');
 
 // Importar middlewares
 const errorHandler = require('./middlewares/errorHandler');
@@ -44,6 +46,8 @@ app.use('/api/workout', workoutRoutes);
 app.use('/api/diet', dietRoutes);
 app.use('/api/progress', progressRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/exercise', exerciseRoutes);
+app.use('/api/integrated', integratedRoutes);
 
 // Middleware para rotas não encontradas
 app.use(notFound);

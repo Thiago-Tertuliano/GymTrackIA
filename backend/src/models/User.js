@@ -61,7 +61,26 @@ const userSchema = new mongoose.Schema({
   lastLogin: {
     type: Date,
     default: Date.now
-  }
+  },
+  favoriteExercises: [{
+    exerciseId: {
+      type: String,
+      required: true
+    },
+    exerciseData: {
+      name: String,
+      muscleGroup: String,
+      equipment: String,
+      target: String,
+      gifUrl: String,
+      instructions: [String],
+      source: String
+    },
+    addedAt: {
+      type: Date,
+      default: Date.now
+    }
+  }]
 }, {
   timestamps: true,
   toJSON: { virtuals: true },
