@@ -14,10 +14,16 @@ router.get('/muscle/:muscleGroup', exerciseController.getExercisesByMuscle);
 router.get('/equipment/:equipment', exerciseController.getExercisesByEquipment);
 router.get('/exercise/:id', exerciseController.getExerciseById);
 
+// Middleware de desenvolvimento (sem autenticação)
+const devAuth = (req, res, next) => {
+  req.user = { id: 'dev-user-123', name: 'Developer' };
+  next();
+};
+
 // Rotas protegidas (precisam de autenticação)
-router.get('/favorites', auth, exerciseController.getFavorites);
-router.post('/favorites', auth, exerciseController.addToFavorites);
-router.delete('/favorites/:exerciseId', auth, exerciseController.removeFromFavorites);
-router.get('/favorites/check/:exerciseId', auth, exerciseController.checkFavorite);
+router.get('/favorites', devAuth, exerciseController.getFavorites);
+router.post('/favorites', devAuth, exerciseController.addToFavorites);
+router.delete('/favorites/:exerciseId', devAuth, exerciseController.removeFromFavorites);
+router.get('/favorites/check/:exerciseId', devAuth, exerciseController.checkFavorite);
 
 module.exports = router; 

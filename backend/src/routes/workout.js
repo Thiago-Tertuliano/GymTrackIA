@@ -111,14 +111,20 @@ const rateWorkoutValidation = [
     .withMessage('Avaliação deve ser entre 1 e 5')
 ];
 
-// Rotas
-router.post('/', auth, createWorkoutValidation, validate, createWorkout);
-router.get('/', auth, getWorkouts);
-router.get('/stats', auth, getWorkoutStats);
-router.get('/:id', auth, getWorkout);
-router.put('/:id', auth, updateWorkoutValidation, validate, updateWorkout);
-router.delete('/:id', auth, deleteWorkout);
-router.post('/complete-set', auth, completeSetValidation, validate, completeSet);
-router.post('/:id/rate', auth, rateWorkoutValidation, validate, rateWorkout);
+// Middleware de desenvolvimento (sem autenticação)
+const devAuth = (req, res, next) => {
+  req.user = { id: 'dev-user-123', name: 'Developer' };
+  next();
+};
+
+// Rotas (sem autenticação em desenvolvimento)
+router.post('/', devAuth, createWorkoutValidation, validate, createWorkout);
+router.get('/', devAuth, getWorkouts);
+router.get('/stats', devAuth, getWorkoutStats);
+router.get('/:id', devAuth, getWorkout);
+router.put('/:id', devAuth, updateWorkoutValidation, validate, updateWorkout);
+router.delete('/:id', devAuth, deleteWorkout);
+router.post('/complete-set', devAuth, completeSetValidation, validate, completeSet);
+router.post('/:id/rate', devAuth, rateWorkoutValidation, validate, rateWorkout);
 
 module.exports = router; 

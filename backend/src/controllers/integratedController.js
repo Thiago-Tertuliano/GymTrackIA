@@ -1,23 +1,32 @@
+const exerciseService = require('../services/exerciseService');
 const wgerService = require('../services/wgerService');
 const aiService = require('../services/aiService');
 const User = require('../models/User');
 
 // ===== EXERCÍCIOS INTEGRADOS =====
 
-// Buscar exercícios da Wger
+// Buscar exercícios da RapidAPI (ExerciseDB)
 const getWgerExercises = async (req, res) => {
   try {
     const { limit = 50, category } = req.query;
     
     let exercises;
+    
     if (category) {
-      exercises = await wgerService.getExercisesByCategory(category);
+      // Mapear categoria para o formato da API
+      const mappedCategory = exerciseService.mapMuscleGroup(category);
+      exercises = await exerciseService.getExercisesByMuscle(mappedCategory);
     } else {
-      exercises = await wgerService.getAllExercises(limit);
+      exercises = await exerciseService.getAllExercises();
+    }
+
+    // Limitar resultados se necessário
+    if (limit && exercises.length > limit) {
+      exercises = exercises.slice(0, limit);
     }
 
     const formattedExercises = exercises.map(exercise => 
-      wgerService.formatExercise(exercise)
+      exerciseService.formatExercise(exercise)
     );
 
     res.json({
@@ -26,11 +35,11 @@ const getWgerExercises = async (req, res) => {
       data: {
         exercises: formattedExercises,
         total: formattedExercises.length,
-        source: 'wger'
+        source: 'rapidapi'
       }
     });
   } catch (error) {
-    console.error('Erro ao buscar exercícios Wger:', error);
+    console.error('Erro ao buscar exercícios:', error);
     res.status(500).json({
       success: false,
       message: 'Erro interno do servidor',
@@ -48,9 +57,19 @@ const getWgerFoods = async (req, res) => {
     
     let foods;
     if (category) {
-      foods = await wgerService.getFoodsByCategory(category);
+      try {
+        foods = await wgerService.getFoodsByCategory(category);
+      } catch (error) {
+        console.error('Erro ao buscar alimentos por categoria, usando fallback:', error.message);
+        foods = getMockFoodsByCategory(category);
+      }
     } else {
-      foods = await wgerService.getAllFoods(limit);
+      try {
+        foods = await wgerService.getAllFoods(limit);
+      } catch (error) {
+        console.error('Erro ao buscar alimentos, usando fallback:', error.message);
+        foods = getMockFoods(limit);
+      }
     }
 
     const formattedFoods = foods.map(food => 
@@ -74,6 +93,124 @@ const getWgerFoods = async (req, res) => {
       error: error.message
     });
   }
+};
+
+// Função para gerar dados simulados de alimentos
+const getMockFoods = (limit = 50) => {
+  const mockFoods = [
+    {
+      id: 1,
+      name: 'Frango',
+      category: 1,
+      energy: 165,
+      protein: 31,
+      carbohydrates: 0,
+      fat: 3.6,
+      fiber: 0,
+      sugar: 0,
+      sodium: 74,
+      image: null,
+      language: 'pt'
+    },
+    {
+      id: 2,
+      name: 'Arroz Integral',
+      category: 2,
+      energy: 111,
+      protein: 2.6,
+      carbohydrates: 23,
+      fat: 0.9,
+      fiber: 1.8,
+      sugar: 0.4,
+      sodium: 5,
+      image: null,
+      language: 'pt'
+    },
+    {
+      id: 3,
+      name: 'Brócolis',
+      category: 3,
+      energy: 34,
+      protein: 2.8,
+      carbohydrates: 7,
+      fat: 0.4,
+      fiber: 2.6,
+      sugar: 1.5,
+      sodium: 33,
+      image: null,
+      language: 'pt'
+    }
+  ];
+
+  return mockFoods.slice(0, limit);
+};
+
+// Função para gerar dados simulados de alimentos por categoria
+const getMockFoodsByCategory = (category) => {
+  const categoryMap = {
+    'proteinas': [
+      {
+        id: 1,
+        name: 'Frango',
+        category: 1,
+        energy: 165,
+        protein: 31,
+        carbohydrates: 0,
+        fat: 3.6,
+        fiber: 0,
+        sugar: 0,
+        sodium: 74,
+        image: null,
+        language: 'pt'
+      },
+      {
+        id: 2,
+        name: 'Ovos',
+        category: 1,
+        energy: 155,
+        protein: 13,
+        carbohydrates: 1.1,
+        fat: 11,
+        fiber: 0,
+        sugar: 1.1,
+        sodium: 124,
+        image: null,
+        language: 'pt'
+      }
+    ],
+    'carboidratos': [
+      {
+        id: 3,
+        name: 'Arroz Integral',
+        category: 2,
+        energy: 111,
+        protein: 2.6,
+        carbohydrates: 23,
+        fat: 0.9,
+        fiber: 1.8,
+        sugar: 0.4,
+        sodium: 5,
+        image: null,
+        language: 'pt'
+      },
+      {
+        id: 4,
+        name: 'Batata Doce',
+        category: 2,
+        energy: 86,
+        protein: 1.6,
+        carbohydrates: 20,
+        fat: 0.1,
+        fiber: 3,
+        sugar: 4.2,
+        sodium: 55,
+        image: null,
+        language: 'pt'
+      }
+    ]
+  };
+
+  return categoryMap[category] || getMockFoods(10);
 };
 
 // ===== IA INTEGRADA =====

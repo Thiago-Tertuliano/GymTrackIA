@@ -4,31 +4,12 @@ class WgerService {
   constructor() {
     this.baseURL = 'https://wger.de/api/v2';
     this.apiKey = process.env.WGER_API_KEY;
-    this.token = null;
-  }
-
-  // Autenticação com Wger
-  async authenticate() {
-    try {
-      const response = await axios.post(`${this.baseURL}/token/`, {
-        username: process.env.WGER_USERNAME,
-        password: process.env.WGER_PASSWORD
-      });
-      this.token = response.data.access;
-      return this.token;
-    } catch (error) {
-      console.error('Erro na autenticação Wger:', error.message);
-      throw new Error('Falha na autenticação com Wger');
-    }
   }
 
   // Obter headers com autenticação
-  async getHeaders() {
-    if (!this.token) {
-      await this.authenticate();
-    }
+  getHeaders() {
     return {
-      'Authorization': `Bearer ${this.token}`,
+      'Authorization': `Token ${this.apiKey}`,
       'Content-Type': 'application/json'
     };
   }
@@ -38,7 +19,7 @@ class WgerService {
   // Buscar todos os exercícios
   async getAllExercises(limit = 100) {
     try {
-      const headers = await this.getHeaders();
+      const headers = this.getHeaders();
       const response = await axios.get(`${this.baseURL}/exercise/?limit=${limit}`, { headers });
       return response.data.results;
     } catch (error) {
@@ -50,7 +31,7 @@ class WgerService {
   // Buscar exercícios por categoria
   async getExercisesByCategory(categoryId) {
     try {
-      const headers = await this.getHeaders();
+      const headers = this.getHeaders();
       const response = await axios.get(`${this.baseURL}/exercise/?category=${categoryId}`, { headers });
       return response.data.results;
     } catch (error) {
@@ -62,7 +43,7 @@ class WgerService {
   // Buscar exercício específico
   async getExerciseById(id) {
     try {
-      const headers = await this.getHeaders();
+      const headers = this.getHeaders();
       const response = await axios.get(`${this.baseURL}/exercise/${id}/`, { headers });
       return response.data;
     } catch (error) {
@@ -74,7 +55,7 @@ class WgerService {
   // Buscar categorias de exercícios
   async getExerciseCategories() {
     try {
-      const headers = await this.getHeaders();
+      const headers = this.getHeaders();
       const response = await axios.get(`${this.baseURL}/exercisecategory/`, { headers });
       return response.data.results;
     } catch (error) {
@@ -88,7 +69,7 @@ class WgerService {
   // Buscar todos os alimentos
   async getAllFoods(limit = 100) {
     try {
-      const headers = await this.getHeaders();
+      const headers = this.getHeaders();
       const response = await axios.get(`${this.baseURL}/ingredient/?limit=${limit}`, { headers });
       return response.data.results;
     } catch (error) {
@@ -100,7 +81,7 @@ class WgerService {
   // Buscar alimento específico
   async getFoodById(id) {
     try {
-      const headers = await this.getHeaders();
+      const headers = this.getHeaders();
       const response = await axios.get(`${this.baseURL}/ingredient/${id}/`, { headers });
       return response.data;
     } catch (error) {
@@ -112,7 +93,7 @@ class WgerService {
   // Buscar alimentos por categoria
   async getFoodsByCategory(categoryId) {
     try {
-      const headers = await this.getHeaders();
+      const headers = this.getHeaders();
       const response = await axios.get(`${this.baseURL}/ingredient/?category=${categoryId}`, { headers });
       return response.data.results;
     } catch (error) {
@@ -124,7 +105,7 @@ class WgerService {
   // Buscar categorias de alimentos
   async getFoodCategories() {
     try {
-      const headers = await this.getHeaders();
+      const headers = this.getHeaders();
       const response = await axios.get(`${this.baseURL}/ingredientcategory/`, { headers });
       return response.data.results;
     } catch (error) {
@@ -136,7 +117,7 @@ class WgerService {
   // Buscar informações nutricionais
   async getNutritionInfo(foodId) {
     try {
-      const headers = await this.getHeaders();
+      const headers = this.getHeaders();
       const response = await axios.get(`${this.baseURL}/ingredient/${foodId}/nutrition/`, { headers });
       return response.data;
     } catch (error) {
